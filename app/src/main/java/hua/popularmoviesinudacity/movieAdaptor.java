@@ -20,8 +20,13 @@ public class movieAdaptor extends ArrayAdapter<movie> {
     }
 
     @Override
+    public int getCount() {
+        return 9;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        movie m=getItem(position);
+//        movie m=getItem(position);
         if(convertView==null){
             convertView= LayoutInflater.from(getContext()).inflate(R.layout.main_list_item,parent,false);
 

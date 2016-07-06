@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,6 +41,7 @@ public class popularMoverFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        
     }
 
     @Override
@@ -81,9 +87,30 @@ public class popularMoverFragment extends Fragment {
     }
     class FetchMovieDataTask extends AsyncTask<String,Void,String[]>{
         private final String LOG_TAG=FetchMovieDataTask.class.getSimpleName();
-        private String[] getMovieDataByJson(){
-            return null;
+
+        private String[] getMovieDataByJson(String movieJsonStr)throws JSONException{
+            final String RESULT="results";
+            final String POSTER_PATH="poster_path";
+            final String ORIGINAL_TITLE="original_title";
+            final String OVERVIEW="overview";
+            final String VOTE_AVERAGE="vote_average";
+            final String RELEASE_DATE="release_date";
+
+            JSONObject Moviewdata=new JSONObject(movieJsonStr);
+            JSONArray jsonArray=Moviewdata.getJSONArray(RESULT);
+            String[] pathRes=new String[12];
+            for(int i=0;i<12;i++){
+                JSONObject singleMovie=jsonArray.getJSONObject(i);
+                String path=singleMovie.getString(POSTER_PATH);
+                pathRes[i]=path;
+            }
+            for(String s:pathRes){
+                Log.d(LOG_TAG,s);
+            }
+
+            return pathRes;
         }
+
         @Override
         protected String[] doInBackground(String... params) {
             HttpURLConnection urlConnection=null;
@@ -137,6 +164,12 @@ public class popularMoverFragment extends Fragment {
                         Log.e("popularMovieFragment", "Error closing stream", e);
                     }
                 }
+            }
+            try{
+                return getMovieDataByJson(movieJsonStr);
+            }catch(JSONException e){
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
             }
             return new String[0];
         }
