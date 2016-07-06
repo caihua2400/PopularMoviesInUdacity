@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,11 +22,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by caihua2300 on 04/07/2016.
  */
 public class popularMoverFragment extends Fragment {
+    private movieAdaptor adaptor;
     public popularMoverFragment() {
     }
 
@@ -50,8 +53,12 @@ public class popularMoverFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView=inflater.inflate(R.layout.popularmoviefragment,container,false);
+        adaptor=new movieAdaptor(getActivity(),new ArrayList<movie>());
+        GridView gridView=(GridView) rootView.findViewById(R.id.gridViewMain);
+        gridView.setAdapter(adaptor);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return rootView;
     }
 
     @Override
