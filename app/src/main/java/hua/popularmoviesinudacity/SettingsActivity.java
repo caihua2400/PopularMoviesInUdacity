@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 
 /**
  * Created by caihua2300 on 05/07/2016.
@@ -14,6 +15,19 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_order);
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_order_key)));
+    }
+
+    private void bindPreferenceSummaryToValue(Preference preference) {
+        // Set the listener to watch for value changes.
+        preference.setOnPreferenceChangeListener(this);
+
+        // Trigger the listener immediately with the preference's
+        // current value.
+        onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getKey(), ""));
     }
 
     @Override
