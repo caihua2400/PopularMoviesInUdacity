@@ -90,6 +90,7 @@ public class popularMoverFragment extends Fragment {
         private final String LOG_TAG=FetchMovieDataTask.class.getSimpleName();
 
         private String[][] getMovieDataByJson(String movieJsonStr)throws JSONException{
+            final String baseMoviewPathUrl="http://image.tmdb.org/t/p/w185/";
             final String RESULT="results";
             final String POSTER_PATH="poster_path";
             final String ORIGINAL_TITLE="original_title";
@@ -100,16 +101,17 @@ public class popularMoverFragment extends Fragment {
             JSONObject Moviewdata=new JSONObject(movieJsonStr);
             JSONArray jsonArray=Moviewdata.getJSONArray(RESULT);
             String[][] movieCollection=new String[12][5];
-            String[] pathRes=new String[12];
+
             for(int i=0;i<12;i++){
                 JSONObject singleMovie=jsonArray.getJSONObject(i);
                 String path=singleMovie.getString(POSTER_PATH);
-                pathRes[i]=path;
+
                 String title=singleMovie.getString(ORIGINAL_TITLE);
                 String overview=singleMovie.getString(OVERVIEW);
                 String vote_average=singleMovie.getString(VOTE_AVERAGE);
                 String release_date=singleMovie.getString(RELEASE_DATE);
-                movieCollection[i][0]=path;
+
+                movieCollection[i][0]=baseMoviewPathUrl+path;
                 movieCollection[i][1]=title;
                 movieCollection[i][2]=overview;
                 movieCollection[i][3]=vote_average;
@@ -119,9 +121,7 @@ public class popularMoverFragment extends Fragment {
 
             }
 
-            for(String s:pathRes){
-                Log.d(LOG_TAG,s);
-            }
+
 
             return movieCollection;
         }
@@ -193,7 +193,14 @@ public class popularMoverFragment extends Fragment {
         protected void onPostExecute(String[][] strings) {
             if(strings!=null){
                 adaptor.clear();
-                
+                for(int i=0;i<strings.length;i++){
+
+                        movie m=new movie(strings[i][0],strings[i][1],strings[i][2],strings[i][3],strings[i][4]);
+                        adaptor.add(m);
+
+
+                }
+
             }
 
             super.onPostExecute(strings);

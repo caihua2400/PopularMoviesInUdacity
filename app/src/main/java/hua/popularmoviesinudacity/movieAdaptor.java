@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class movieAdaptor extends ArrayAdapter<movie> {
 
+
     public movieAdaptor(Context context,List<movie> objects) {
         super(context, 0, objects);
 
@@ -23,19 +24,19 @@ public class movieAdaptor extends ArrayAdapter<movie> {
 
     @Override
     public int getCount() {
-        return 9;
+        return 12;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//        movie m=getItem(position);
+        movie m=getItem(position);
         if(convertView==null){
             convertView= LayoutInflater.from(getContext()).inflate(R.layout.main_list_item,parent,false);
 
         }
 
         ImageView imageView=(ImageView) convertView.findViewById(R.id.main_image);
-        Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ").into(imageView);
+        Picasso.with(getContext()).load(m.getPath()).into(imageView);
         //imageView.setImageResource(m.getImage());
         return convertView;
     }
