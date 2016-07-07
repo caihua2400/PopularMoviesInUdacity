@@ -33,8 +33,11 @@ import java.util.ArrayList;
  * Created by caihua2300 on 04/07/2016.
  */
 public class popularMoverFragment extends Fragment {
+    String[][] movieArray=new String[12][5];
     ArrayList movieList;
     private movieAdaptor adaptor;
+    GridView gridView;
+    View rootView;
     public popularMoverFragment() {
     }
 
@@ -42,6 +45,7 @@ public class popularMoverFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        //adaptor=new movieAdaptor(getActivity(),new ArrayList<movie>());
 
     }
 
@@ -49,20 +53,23 @@ public class popularMoverFragment extends Fragment {
     public void onStart() {
         super.onStart();
     }
+
     private void updateMovie(){
+
         FetchMovieDataTask fetchMovieDataTask=new FetchMovieDataTask();
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
         String order=sharedPreferences.getString(getString(R.string.pref_order_key),getString(R.string.default_order));
         fetchMovieDataTask.execute(order);
+        //adaptor.notifyDataSetChanged();
 
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView=inflater.inflate(R.layout.popularmoviefragment,container,false);
+        rootView=inflater.inflate(R.layout.popularmoviefragment,container,false);
         adaptor=new movieAdaptor(getActivity(),new ArrayList<movie>());
-        GridView gridView=(GridView) rootView.findViewById(R.id.gridViewMain);
+        gridView=(GridView) rootView.findViewById(R.id.gridViewMain);
         gridView.setAdapter(adaptor);
 
         return rootView;
@@ -193,14 +200,21 @@ public class popularMoverFragment extends Fragment {
         protected void onPostExecute(String[][] strings) {
             if(strings!=null){
                 adaptor.clear();
+
                 for(int i=0;i<strings.length;i++){
 
                         movie m=new movie(strings[i][0],strings[i][1],strings[i][2],strings[i][3],strings[i][4]);
                         adaptor.add(m);
-                    
+
+
 
 
                 }
+
+                adaptor.notifyDataSetChanged();
+                gridView=(GridView) rootView.findViewById(R.id.gridViewMain);
+                gridView.setAdapter(adaptor);
+
 
             }
 

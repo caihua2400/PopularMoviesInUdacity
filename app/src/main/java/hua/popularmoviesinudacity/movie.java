@@ -12,7 +12,7 @@ public class movie implements Serializable {
     private String vote_average;
     private String release_date;
 
-    public movie(String overview, String path, String release_date, String title, String vote_average) {
+    public movie(String path, String title, String overview, String vote_average, String release_date) {
         this.overview = overview;
         this.path = path;
         this.release_date = release_date;
