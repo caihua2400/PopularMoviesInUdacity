@@ -15,8 +15,10 @@ import java.util.List;
  * Created by caihua2300 on 06/07/2016.
  */
 public class movieAdaptor extends ArrayAdapter<movie> {
-    public movieAdaptor(Context context, List<movie> objects) {
+
+    public movieAdaptor(Context context,List<movie> objects) {
         super(context, 0, objects);
+
     }
 
     @Override

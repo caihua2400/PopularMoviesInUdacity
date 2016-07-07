@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity"
-    >
+    android:orientation="vertical">
 
-    <GridView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/gridViewMain"
-        android:horizontalSpacing="1pt"
-        android:verticalSpacing="1pt"
-        android:numColumns="3"></GridView>
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/gridViewMain"
+            android:horizontalSpacing="1pt"
+            android:verticalSpacing="1pt"
+            android:numColumns="3"></GridView>
+    </FrameLayout>
+
+
+
+</LinearLayout>
