@@ -69,8 +69,8 @@ public class popularMoverFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView=inflater.inflate(R.layout.popularmoviefragment,container,false);
         adaptor=new movieAdaptor(getActivity(),new ArrayList<movie>());
-        gridView=(GridView) rootView.findViewById(R.id.gridViewMain);
-        gridView.setAdapter(adaptor);
+        //gridView=(GridView) rootView.findViewById(R.id.gridViewMain);
+        //gridView.setAdapter(adaptor);
 
         return rootView;
     }
