@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * Created by caihua2300 on 04/07/2016.
  */
 public class popularMoverFragment extends Fragment {
-    String[][] movieArray=new String[12][5];
+
     ArrayList movieList;
     private movieAdaptor adaptor;
     GridView gridView;
@@ -51,7 +51,10 @@ public class popularMoverFragment extends Fragment {
 
     @Override
     public void onStart() {
+
+
         super.onStart();
+        updateMovie();
     }
 
     private void updateMovie(){
@@ -60,7 +63,7 @@ public class popularMoverFragment extends Fragment {
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
         String order=sharedPreferences.getString(getString(R.string.pref_order_key),getString(R.string.default_order));
         fetchMovieDataTask.execute(order);
-        //adaptor.notifyDataSetChanged();
+
 
     }
 
@@ -68,9 +71,9 @@ public class popularMoverFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView=inflater.inflate(R.layout.popularmoviefragment,container,false);
-        adaptor=new movieAdaptor(getActivity(),new ArrayList<movie>());
+
         gridView=(GridView) rootView.findViewById(R.id.gridViewMain);
-        //gridView.setAdapter(adaptor);
+
 
         return rootView;
     }
@@ -93,10 +96,10 @@ public class popularMoverFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-    class FetchMovieDataTask extends AsyncTask<String,Void,String[][]>{
+    class FetchMovieDataTask extends AsyncTask<String,Void,ArrayList<movie>>{
         private final String LOG_TAG=FetchMovieDataTask.class.getSimpleName();
 
-        private String[][] getMovieDataByJson(String movieJsonStr)throws JSONException{
+        private ArrayList getMovieDataByJson(String movieJsonStr)throws JSONException{
             final String baseMoviewPathUrl="http://image.tmdb.org/t/p/w185/";
             final String RESULT="results";
             final String POSTER_PATH="poster_path";
@@ -107,34 +110,31 @@ public class popularMoverFragment extends Fragment {
 
             JSONObject Moviewdata=new JSONObject(movieJsonStr);
             JSONArray jsonArray=Moviewdata.getJSONArray(RESULT);
-            String[][] movieCollection=new String[12][5];
 
-            for(int i=0;i<12;i++){
+            movieList=new ArrayList<movie>();
+
+
+            for(int i=0;i<jsonArray.length();i++){
                 JSONObject singleMovie=jsonArray.getJSONObject(i);
-                String path=singleMovie.getString(POSTER_PATH);
+                String path=baseMoviewPathUrl+singleMovie.getString(POSTER_PATH);
 
                 String title=singleMovie.getString(ORIGINAL_TITLE);
                 String overview=singleMovie.getString(OVERVIEW);
                 String vote_average=singleMovie.getString(VOTE_AVERAGE);
                 String release_date=singleMovie.getString(RELEASE_DATE);
-
-                movieCollection[i][0]=baseMoviewPathUrl+path;
-                movieCollection[i][1]=title;
-                movieCollection[i][2]=overview;
-                movieCollection[i][3]=vote_average;
-                movieCollection[i][4]=release_date;
-
+                movie m=new movie(path,title,overview,vote_average,release_date);
+                movieList.add(m);
 
 
             }
 
 
 
-            return movieCollection;
+            return movieList;
         }
 
         @Override
-        protected String[][] doInBackground(String... params) {
+        protected ArrayList<movie> doInBackground(String... params) {
             HttpURLConnection urlConnection=null;
             BufferedReader reader=null;
             String movieJsonStr=null;
@@ -193,23 +193,15 @@ public class popularMoverFragment extends Fragment {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
-            return new String[0][];
+            return new ArrayList<movie>();
         }
 
         @Override
-        protected void onPostExecute(String[][] strings) {
+        protected void onPostExecute(ArrayList<movie> strings) {
             if(strings!=null){
-                adaptor.clear();
 
-                for(int i=0;i<strings.length;i++){
-
-                        movie m=new movie(strings[i][0],strings[i][1],strings[i][2],strings[i][3],strings[i][4]);
-                        adaptor.add(m);
-
-
-
-
-                }
+                adaptor=new movieAdaptor(getActivity(),new ArrayList<movie>());
+                adaptor.addAll(movieList);
 
                 adaptor.notifyDataSetChanged();
 
