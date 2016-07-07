@@ -197,6 +197,7 @@ public class popularMoverFragment extends Fragment {
 
                         movie m=new movie(strings[i][0],strings[i][1],strings[i][2],strings[i][3],strings[i][4]);
                         adaptor.add(m);
+                    
 
 
                 }
