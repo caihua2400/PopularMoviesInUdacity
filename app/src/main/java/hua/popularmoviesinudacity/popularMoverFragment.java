@@ -1,7 +1,9 @@
 package hua.popularmoviesinudacity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,13 +62,25 @@ public class popularMoverFragment extends Fragment {
 
         updateMovie();
     }
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
 
     private void updateMovie(){
+        if(isOnline()){
+            FetchMovieDataTask fetchMovieDataTask=new FetchMovieDataTask();
+            SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String order=sharedPreferences.getString(getString(R.string.pref_order_key),getString(R.string.default_order));
+            fetchMovieDataTask.execute(order);
+        }else{
+            Toast.makeText(getActivity(),"please check your network connection",Toast.LENGTH_LONG).show();
+        }
 
-        FetchMovieDataTask fetchMovieDataTask=new FetchMovieDataTask();
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String order=sharedPreferences.getString(getString(R.string.pref_order_key),getString(R.string.default_order));
-        fetchMovieDataTask.execute(order);
+
 
 
     }
