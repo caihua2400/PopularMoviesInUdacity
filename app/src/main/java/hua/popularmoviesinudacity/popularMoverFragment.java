@@ -166,7 +166,8 @@ public class popularMoverFragment extends Fragment {
             String movieJsonStr=null;
             try{
                 final String baseUrl="https://api.themoviedb.org/3/discover/movie?";
-                final String api_key="5b225f3e1c035eb518d4398622376bc8";
+                //insert you api key here:
+                final String api_key="your api key";
                 final String SORT_PARAM="sort_by";
                 Uri uri=Uri.parse(baseUrl).buildUpon().appendQueryParameter(SORT_PARAM,params[0]).appendQueryParameter("api_key",api_key).build();
                 URL url=new URL(uri.toString());
